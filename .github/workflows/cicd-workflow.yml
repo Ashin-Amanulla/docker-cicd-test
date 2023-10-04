@@ -2,11 +2,11 @@ name: CICD
 
 on:
   push:
-    branches: [cicd-docker-ec2]
+    branches: [main]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest]
 
     steps:
       - name: Checkout source
@@ -22,8 +22,8 @@ jobs:
         run:  docker push integrationninjas/test-node:latest
 
   deploy:
-    runs-on: [aws-ec2]
     needs: build
+    runs-on: [aws-ec2]
     steps:
       - name: Pull image from docker hub
         run: docker pull integrationninjas/test-node:latest
