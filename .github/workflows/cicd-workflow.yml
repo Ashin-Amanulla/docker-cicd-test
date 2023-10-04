@@ -11,6 +11,26 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
-        
+
       - name: Login to docker hub
-        run:  docker login -u username -p password
+        run:  docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build docker image
+        run:  docker build -t integrationninjas/test-node .
+
+      - name: Publish image to docker hub
+        run:  docker push integrationninjas/test-node:latest
+
+  deploy:
+    runs-on: [aws-ec2]
+    needs: build
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull integrationninjas/test-node:latest
+        
+      - name: Delete old container
+        run: docker rm -f test-node-container
+
+      - name: Run docker container
+        run: docker run -d -p 5000:5000 -name test-node-container integrationninjas/test-node
+     
