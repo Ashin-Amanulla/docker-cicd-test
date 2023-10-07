@@ -7,7 +7,8 @@ const PORT = process.env.PORT || 5000;
 app.use(bodyParser.json());
 
 app.get('/',(req,res)=>{
-    res.send("Hello All!")
+    res.send("Hello Al!")
+
 })
 // Start the server
 app.listen(PORT, () => {
